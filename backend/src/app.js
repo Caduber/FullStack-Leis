@@ -5,6 +5,7 @@ import compression from 'compression';
 import cors from 'cors';
 import morgan from 'morgan';
 import errorHandler from './config/errorHandler.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(morgan('dev'));
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+app.use('/api/auth', authRoutes);
 
 app.use(errorHandler);
 
