@@ -6,6 +6,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import errorHandler from './config/errorHandler.js';
 import authRoutes from './routes/auth.js';
+import propostasRoutes from './routes/propostas.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/propostas', propostasRoutes);
 
 app.use(errorHandler);
 
