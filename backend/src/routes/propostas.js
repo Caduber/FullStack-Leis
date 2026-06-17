@@ -22,15 +22,20 @@ router.get(
   verifyToken,
   [
     query('keyword')
+      .optional()
       .trim()
       .escape()
-      .notEmpty().withMessage('A palavra-chave é obrigatória.')
       .isLength({ min: 3 }).withMessage('A palavra-chave deve ter no mínimo 3 caracteres.'),
     handleValidation,
   ],
   async (req, res) => {
     try {
       const { keyword } = req.query;
+
+      if (!keyword || keyword.trim().length < 3) {
+        const resultados = await Proposta.listAll();
+        return res.json({ resultados });
+      }
 
       const cacheKey = `propostas:${keyword}`;
       const cached = cache.get(cacheKey);
@@ -95,6 +100,9 @@ router.post(
         uri,
         user_id: req.user.id,
       });
+
+      const cacheKeys = cache.keys().filter(k => k.startsWith('propostas:'));
+      cacheKeys.forEach(k => cache.del(k));
 
       logger.info('Proposta inserida', {
         propostaId: proposta.id,

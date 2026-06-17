@@ -157,7 +157,13 @@ export default function InsertPanel() {
         helperText={fieldErrors.dataApresentacao}
         fullWidth
         margin="normal"
+        required
         InputLabelProps={{ shrink: true }}
+        sx={{
+          '& input[type="date"]:invalid::-webkit-datetime-edit': {
+            color: 'transparent',
+          },
+        }}
       />
       <TextField
         label="URI (opcional)"

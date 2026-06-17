@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -10,10 +10,16 @@ import PropostaCard from './Card.jsx';
 
 export default function SearchPanel() {
   const { state: authState } = useAuth();
-  const { state, search } = useProposta();
+  const { state, search, fetchAll } = useProposta();
   const [keyword, setKeyword] = useState('');
   const [error, setError] = useState('');
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (authState.token) {
+      fetchAll(authState.token);
+    }
+  }, [authState.token, fetchAll]);
 
   function validate() {
     if (!keyword.trim()) {

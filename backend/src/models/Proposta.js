@@ -22,6 +22,13 @@ const Proposta = {
     return rows[0];
   },
 
+  async listAll() {
+    const { rows } = await pool.query(
+      'SELECT * FROM propostas ORDER BY data_apresentacao DESC'
+    );
+    return rows;
+  },
+
   async findAll(userId) {
     const { rows } = await pool.query(
       'SELECT * FROM propostas WHERE user_id = $1 ORDER BY created_at DESC',

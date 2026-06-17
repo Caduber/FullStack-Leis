@@ -38,8 +38,25 @@ export function PropostaProvider({ children }) {
     }
   }, []);
 
+  const fetchAll = useCallback(async (token) => {
+    dispatch({ type: 'SET_LOADING' });
+    try {
+      const res = await fetch('/api/propostas', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch({ type: 'SET_ERRO', payload: data.error?.message || 'Erro ao carregar propostas.' });
+        return;
+      }
+      dispatch({ type: 'SET_RESULTADOS', payload: data.resultados });
+    } catch {
+      dispatch({ type: 'SET_ERRO', payload: 'Erro de conexão com o servidor.' });
+    }
+  }, []);
+
   return (
-    <PropostaContext.Provider value={{ state, search }}>
+    <PropostaContext.Provider value={{ state, search, fetchAll }}>
       {children}
     </PropostaContext.Provider>
   );
